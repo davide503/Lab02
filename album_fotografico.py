@@ -1,20 +1,76 @@
 def carica_da_file(file_path):
-    """Carica le foto dal file, creando un nuovo anno ogni volta che compare per la prima volta"""
+    album = {}
+    try:
+        with open(file_path, "r",encoding="utf-8") as f:
+            header = f.readline()
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                codice,titolo,autore,mese,anno = line.split(",")
+                mese = int(mese)
+                anno = int(anno)
+                foto ={
+                    "codice": codice,
+                    "titolo":titolo,
+                    "autore":autore,
+                    "mese":mese,
+                    "anno":anno,
+                    }
+                if anno not in album:
+                    album[anno] = []
+                album[anno].append(foto)
+        return album
+    except FileNotFoundError:
+        return None
+
+
+
+
     # TODO
 
 
 def aggiungi_foto(album, codice, titolo, autore, mese, anno, file_path):
-    """Aggiunge una foto all'album, creando l'anno al volo se non è ancora presente"""
-    # TODO
+    foto ={
+        "codice": codice,
+        "titolo": titolo,
+        "autore": autore,
+        "mese": mese,
+        "anno": anno,
+    }
+    if mese <0 or mese >12 :
+        return None
+
+
+
+    if anno not in album:
+        album[anno]= []
+    album[anno].append(foto)
+    return True
+
+ # TODO
 
 
 def cerca_foto(album, codice):
-    """Cerca una foto nell'album dato il codice"""
+    try:
+        foto=album[codice]
+        return foto
+    except KeyError:
+        return None
     # TODO
 
 
 def elenco_foto_anno_per_titolo(album, anno):
-    """Ordina i titoli delle foto di un dato anno in ordine alfabetico"""
+    if anno not in album or not album[anno]:
+        return None
+    titoli = [foto["titolo"] for foto in album[anno]]
+    titoli.sort()
+    return titoli
+
+
+
+
+
     # TODO
 
 
